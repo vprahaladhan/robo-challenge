@@ -20,57 +20,55 @@ const directions = [
 // assumption is to not allow movement to a cell which is already occupied
 // feature has not been implemented in this iteration, probably for next iteration
 class Grid {
-  static cells = [n - 1][n - 1];
+  static #cells = [n - 1][n - 1];
 
   static occupy(x, y) {
-    this.cells[x][y] = true;
+    this.#cells[x][y] = true;
   }
 
   static isOccupied(x, y) {
-    return !!this.cells[x][y];
+    return !!this.#cells[x][y];
   }
 }
 
 // Main robot class with methods for the different operations
 class Robot {
-  static all = [];
-  static count = 0;
-  static active = null;
+  static #all = [];
+  static #active = null;
 
   constructor(x, y, direction) {
-    this.name = `Robot ${Robot.all.length + 1}`;
+    this.name = `Robot ${Robot.#all.length + 1}`;
     this.x = x;
     this.y = y;
     this.direction = directions.find(d => d.value === direction);
-    Robot.all.push(this);
-    Robot.count++;
-    Robot.active = Robot.count === 1 ? this : Robot.active;
+    Robot.#all.push(this);
+    Robot.#active = Robot.#all.length === 1 ? this : Robot.#active;
   }
 
   // method to make a robot active given a index
   static setActive(index) {
-    this.active = index <= this.count ? this.all[index - 1] : this.active;
+    this.#active = index <= this.#all.length ? this.#all[index - 1] : this.#active;
   }
 
   static report() {
-    this.all.forEach(robot => console.log(`${robot.name}: ${robot.report()}`));
-    console.log(`No of robots: ${this.all.length}, Active robot: ${this.active.name}`);
+    this.#all.forEach(robot => console.log(`${robot.name}: ${robot.report()}`));
+    console.log(`No of robots: ${this.#all.length}, Active robot: ${this.#active.name}`);
   }
 
   static left() {
-    this.active.direction = directions[(this.active.direction.index + 3) % 4];
+    this.#active.direction = directions[(this.#active.direction.index + 3) % 4];
   }
 
   static right() {
-    this.active.direction = directions[(this.active.direction.index + 1) % 4];
+    this.#active.direction = directions[(this.#active.direction.index + 1) % 4];
   }
 
   static move() {
-    switch (this.active.direction.value) {
-      case 'NORTH': this.active.y = this.active.y < (n - 1) ? this.active.y + 1 : this.active.y; break;
-      case 'WEST':  this.active.x = this.active.x > 0 ? this.active.x - 1 : this.active.x; break;
-      case 'EAST':  this.active.x = this.active.x < (n - 1) ? this.active.x + 1 : this.active.x; break;
-      case 'SOUTH': this.active.y = this.active.y > 0 ? this.active.y - 1 : this.active.y; break;
+    switch (this.#active.direction.value) {
+      case 'NORTH': this.#active.y = this.#active.y < (n - 1) ? this.#active.y + 1 : this.#active.y; break;
+      case 'WEST':  this.#active.x = this.#active.x > 0 ? this.#active.x - 1 : this.#active.x; break;
+      case 'EAST':  this.#active.x = this.#active.x < (n - 1) ? this.#active.x + 1 : this.#active.x; break;
+      case 'SOUTH': this.#active.y = this.#active.y > 0 ? this.#active.y - 1 : this.#active.y; break;
     }
   }
 
@@ -83,7 +81,7 @@ class Main {
   static placeRobot(position) {
     const [x, y, dir] = position.split(',');
     // to prevent robot being placed in a cell outside of the grid
-    if (x >= 0 && x < n && y >= 0 && y < n) {
+    if (x, y >= 0 && x, y < n) {
       new Robot(parseInt(x), parseInt(y), dir);
       placed = true;
     }
